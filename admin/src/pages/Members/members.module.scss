@@ -1,0 +1,77 @@
+@import "../../mixins";
+@import "../../variables";
+
+.membersPage {
+  .searchBar {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 20px;
+
+    > input {
+      width: 200px;
+      height: 50px;
+      border-radius: 25px;
+      padding: 0px 10px;
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+      border: 2px solid $darkColor;
+      background-color: $bgColor;
+      color: $darkColor;
+      font-size: 18px;
+      font-weight: 300;
+
+      &::placeholder {
+        color: $darkColor;
+        font-family: inherit;
+      }
+    }
+  }
+
+  .table {
+    border: 1px solid $darkColor;
+    padding: 0 10px 10px;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+    max-height: 500px;
+    overflow-y: scroll;
+
+    > div {
+      display: flex;
+      margin-bottom: 5px;
+
+      > div {
+        flex: 1;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-weight: 300;
+        padding: 0 10px;
+      }
+    }
+
+    .headingRow {
+      position: sticky;
+      top: 0;
+      left: 0;
+      background-color: $bgColor;
+      border-radius: 15px 15px 0 0;
+      padding: 10px;
+    }
+
+    .row {
+      > div:first-child {
+        border: 1px solid $darkColor;
+        border-radius: 20px;
+      }
+    }
+  }
+}
+
+.note {
+  font-weight: 300;
+  padding: 20px;
+}

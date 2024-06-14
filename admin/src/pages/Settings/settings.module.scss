@@ -1,0 +1,97 @@
+@import "../../variables";
+@import "../../mixins";
+
+.settingsPage {
+  > ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+
+    > li {
+      flex: 1;
+      min-width: 100px;
+      width: auto;
+      height: 50px;
+      border: 2px solid $purpleColor;
+      display: flex;
+      justify-content: flex-start;
+      align-items: center;
+      padding: 10px;
+      border-radius: 25px;
+      color: $purpleColor;
+      font-weight: 900;
+      font-size: 12px;
+      cursor: pointer;
+
+      &.navItemActive {
+        color: $bgColor;
+        background-color: $purpleColor;
+      }
+
+      @include sm {
+        font-size: 16px;
+      }
+
+      @include lg {
+        font-size: 18px;
+      }
+
+      @include xl {
+        font-size: 20px;
+      }
+
+      @include xxl {
+        font-size: 24px;
+      }
+    }
+  }
+
+  .table {
+    display: none;
+    flex-direction: column;
+    margin-top: 50px;
+
+    @include sm {
+      display: flex;
+    }
+
+    > div {
+      display: flex;
+
+      > div {
+        flex: 1;
+        font-size: 18px;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 10px;
+      }
+    }
+
+    .headingRow {
+      margin-bottom: 20px;
+      div {
+        font-weight: 500;
+      }
+    }
+
+    .row {
+      div {
+        font-weight: 300;
+      }
+
+      .deleteItem {
+        color: red;
+        cursor: pointer;
+      }
+    }
+  }
+}
+
+.warning {
+  color: $darkColor;
+  text-align: center;
+  @include sm {
+    display: none;
+  }
+}

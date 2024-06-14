@@ -1,0 +1,30 @@
+@import "../../variables";
+@import "../../mixins";
+
+.layout {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  background-color: $bgColor;
+  padding: 30px;
+  gap: 50px;
+
+  @include md {
+    flex-direction: row;
+  }
+
+  .sidebar {
+    border-radius: 15px;
+
+    @include md {
+      flex: 1;
+    }
+  }
+
+  .content {
+    border-radius: 15px;
+    @include md {
+      flex: 3;
+    }
+  }
+}

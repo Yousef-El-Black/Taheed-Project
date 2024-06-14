@@ -1,0 +1,28 @@
+@import "./variables";
+
+// Screen Media
+@mixin sm {
+  @media (min-width: $breakpoint-small) {
+    @content;
+  }
+}
+@mixin md {
+  @media (min-width: $breakpoint-medium) {
+    @content;
+  }
+}
+@mixin lg {
+  @media (min-width: $breakpoint-large) {
+    @content;
+  }
+}
+@mixin xl {
+  @media (min-width: $breakpoint-xlarge) {
+    @content;
+  }
+}
+@mixin xxl {
+  @media (min-width: $breakpoint-2xlarge) {
+    @content;
+  }
+}
