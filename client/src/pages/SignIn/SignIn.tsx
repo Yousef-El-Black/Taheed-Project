@@ -1,24 +1,30 @@
 import Button from "../../components/SlideButton/SlideButton";
 import Input from "../../components/Input/Input";
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useDispatch, useSelector } from "react-redux";
+import { signin } from "../../redux/apiCalls";
 
 const SignIn = () => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [err, setErr] = useState<boolean>(false);
+
+  const dispatch = useDispatch();
+
+  const navigate = useNavigate();
+
+  const { currentUser, error } = useSelector((state: any) => state.user);
 
   const handleSignIn = async () => {
     try {
       const foundUser = await axios.get(
         `${process.env.REACT_APP_SERVER_URL}user/findbyemail/${email}`
       );
-      if (foundUser.data.verifiyStage) {
-        const user = await axios.post(
-          `${process.env.REACT_APP_SERVER_URL}auth/signin`,
-          { email: email, password: password }
-        );
-        console.log(user);
+      if (foundUser.data.verifyStage) {
+        signin(dispatch, { email, password });
+        console.log(currentUser);
       } else {
         console.error("User is not Found");
       }
@@ -26,6 +32,16 @@ const SignIn = () => {
       console.error(err);
     }
   };
+
+  useEffect(() => {
+    console.log(currentUser);
+    if (currentUser) {
+      navigate("/dashboard");
+    }
+    if (error) {
+      setErr(true);
+    }
+  }, [error, currentUser]);
 
   return (
     <div className="signIn h-screen">
@@ -52,6 +68,8 @@ const SignIn = () => {
                 handleSignIn();
               }}
             />
+            {err && <span>Something went Wrong!</span>}
+
             <p>
               ليس لدى حساب انضم الينا{" "}
               <Link to={"/register"} className="underline">

@@ -1,10 +1,13 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import Input from "../../components/Input/Input";
 import SlideButton from "../../components/SlideButton/SlideButton";
 import AcceptInput from "../../components/AcceptInput/AcceptInput";
 import DropFile from "../../components/DropFile/DropFile";
 import ErrorMessage from "../../components/ErrorMessage/ErrorMessage";
+import ImageIcon from "@mui/icons-material/Image";
+import axios from "axios";
+import { useSelector } from "react-redux";
 
 const AddContract = () => {
   const [slideIndex, setSlideIndex] = useState<number>(0);
@@ -14,11 +17,68 @@ const AddContract = () => {
   const [acceptAgreement, setAcceptAgreement] = useState<boolean>(false);
   const [file, setFile] = useState<any>(null);
   const [error, setError] = useState<any>([]);
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
+  const [imageUrl, setImageUrl] = useState<any>(null);
+  const [userId, setUserId] = useState<string>("");
 
-  // Previous Page
-  // const prevSlideGo = () => {
-  //   setSlideIndex((prev) => prev - 1);
-  // };
+  const { currentUser } = useSelector((state: any) => state.user);
+
+  const navigate = useNavigate();
+
+  // Reject Minus Motocycles Number
+  const confirmMotocyclesNumber = () => {
+    if (itemsNumber > 0) {
+      nextSlideGo();
+    } else {
+      setError((prev: any) => [...prev, { text: "العدد مرفوض!" }]);
+    }
+  };
+
+  // handle Image Change
+  const handleImageChange = (e: any) => {
+    setFile(e.target.files[0]);
+  };
+
+  // Upload Image & Getting Photo Link
+  const confirmImage = async () => {
+    const formData = new FormData();
+    formData.append("image", file);
+    setIsDisabled(true);
+
+    try {
+      const res = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}upload`,
+        formData,
+        {
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
+        }
+      );
+      setImageUrl(res.data.url);
+      const contract = await axios.post(
+        `${process.env.REACT_APP_SERVER_URL}contract/`,
+        {
+          userId,
+          motocycles: itemsNumber,
+          isDevided: rentMany,
+          img: imageUrl,
+          rent: 18,
+        }
+      );
+      const user: any = await axios.get(
+        `${process.env.REACT_APP_SERVER_URL}user/${userId}`
+      );
+      await axios.put(`${process.env.REACT_APP_SERVER_URL}user/${userId}`, {
+        contracts: [...user.data.contracts, contract.data],
+        userId,
+      });
+      nextSlideGo();
+    } catch (err) {
+      console.error("Image upload failed", err);
+      setIsDisabled(false);
+    }
+  };
 
   // Next Page
   const nextSlideGo = () => {
@@ -36,6 +96,14 @@ const AddContract = () => {
   const toggleAcceptAgreement = () => {
     setAcceptAgreement((prev) => !prev);
   };
+
+  useEffect(() => {
+    if (!currentUser) {
+      navigate("/");
+    } else {
+      setUserId(currentUser._id);
+    }
+  }, [currentUser]);
 
   return (
     <div className="addContractPage">
@@ -73,7 +141,7 @@ const AddContract = () => {
               }}
             />
             <div className="flex flex-col md:flex-row justify-between items-center w-full">
-              <SlideButton text="التالي" event={nextSlideGo} />
+              <SlideButton text="التالي" event={confirmMotocyclesNumber} />
               <p className="font-extralight text-lg text-fontColor">
                 كل دراجة نارية تؤجر بـ 500 ريال شهريا
               </p>
@@ -117,7 +185,14 @@ const AddContract = () => {
               text={"لقد فهمت ذلك"}
               event={toggleIKnowAcceptation}
             />
-            <SlideButton text="التالي" event={nextSlideGo} />
+            <SlideButton
+              text="التالي"
+              event={() =>
+                iKnow
+                  ? nextSlideGo()
+                  : setError((prev: any) => [...prev, { text: "فعل الزر" }])
+              }
+            />
           </div>
         </div>
 
@@ -180,7 +255,14 @@ const AddContract = () => {
               event={toggleAcceptAgreement}
             />
             <div className="flex flex-col md:flex-row justify-between items-center w-full">
-              <SlideButton text="التالي" event={nextSlideGo} />
+              <SlideButton
+                text="التالي"
+                event={() =>
+                  acceptAgreement
+                    ? nextSlideGo()
+                    : setError((prev: any) => [...prev, { text: "فعل الزر" }])
+                }
+              />
               <p className="font-extralight text-lg text-fontColor">
                 سوف يتم ارسال نسخة موقعة من قبلنا على بريدك الالكتروني بعد
                 إنهائك لجميع خطوات التسجيل
@@ -205,9 +287,21 @@ const AddContract = () => {
             </p>
             <DropFile
               text={"ارفق ايصال التحويل هنا"}
-              change={(e: any) => setFile(e.target.value)}
+              change={handleImageChange}
             />
-            <SlideButton text="التالي" event={nextSlideGo} />
+            {file ? (
+              <span>
+                <ImageIcon />
+                {file.name}
+              </span>
+            ) : (
+              ""
+            )}
+            <SlideButton
+              text="التالي"
+              event={confirmImage}
+              isDisabled={isDisabled}
+            />
           </div>
         </div>
 

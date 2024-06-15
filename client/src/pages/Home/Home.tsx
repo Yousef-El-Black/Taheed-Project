@@ -1,6 +1,19 @@
+import { useSelector } from "react-redux";
 import Button from "../../components/Button/Button";
+import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 
 const Home = () => {
+  const { currentUser } = useSelector((state: any) => state.user);
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (currentUser) {
+      navigate("/dashboard");
+    }
+  }, [currentUser]);
+
   return (
     <div className="home bg-backgroundColor" style={{ direction: "rtl" }}>
       <div className="container mx-auto min-h-[100vh] flex flex-col">

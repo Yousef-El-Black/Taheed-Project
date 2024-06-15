@@ -8,7 +8,7 @@ const UserSchema = new Schema(
     contracts: { type: Array, default: [] },
     phone: { type: String },
     nationalId: { type: String },
-    verifiyStage: { type: String, default: "first" },
+    verifyStage: { type: String, default: "first" },
   },
 
   { timestamps: true }

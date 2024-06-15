@@ -1,9 +1,10 @@
-import { createSlice, PayloadAction } from "@reduxjs/toolkit";
-import type { RootState } from "../../app/store";
+import { createSlice } from "@reduxjs/toolkit";
 
 // Define the initial state using that type
 const initialState = {
-  value: 0,
+  error: false,
+  isFetching: false,
+  currentUser: null,
 };
 
 export const userSlice = createSlice({
@@ -11,22 +12,30 @@ export const userSlice = createSlice({
   // `createSlice` will infer the state type from the `initialState` argument
   initialState,
   reducers: {
-    increment: (state) => {
-      state.value += 1;
+    signinStart: (state) => {
+      state.isFetching = true;
+      state.error = false;
+      state.currentUser = null;
     },
-    decrement: (state) => {
-      state.value -= 1;
+    signinSuccess: (state, action) => {
+      state.isFetching = false;
+      state.error = false;
+      state.currentUser = action.payload;
     },
-    // Use the PayloadAction type to declare the contents of `action.payload`
-    incrementByAmount: (state, action: PayloadAction<number>) => {
-      state.value += action.payload;
+    signinFailure: (state) => {
+      state.isFetching = false;
+      state.error = true;
+      state.currentUser = null;
+    },
+    logoutStart: (state) => {
+      state.isFetching = false;
+      state.error = false;
+      state.currentUser = null;
     },
   },
 });
 
-export const { increment, decrement, incrementByAmount } = counterSlice.actions;
-
-// Other code such as selectors can use the imported `RootState` type
-export const selectCount = (state: RootState) => state.counter.value;
+export const { signinFailure, signinStart, signinSuccess, logoutStart } =
+  userSlice.actions;
 
 export default userSlice.reducer;

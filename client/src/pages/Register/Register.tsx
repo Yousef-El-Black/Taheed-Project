@@ -26,6 +26,7 @@ const Register = () => {
   const [imageUrl, setImageUrl] = useState<any>(null);
   const [error, setError] = useState<any>([]);
   const [userId, setUserId] = useState<string>("");
+  const [isDisabled, setIsDisabled] = useState<boolean>(false);
 
   // Validate Email
   const validateEmail = (email: string) => {
@@ -127,7 +128,7 @@ const Register = () => {
       if (password.length > 7) {
         await axios.post(
           `${process.env.REACT_APP_SERVER_URL}user/stagethree/${userId}`,
-          { phone: phoneNumber, nationalId, fullname, password }
+          { phone: phoneNumber, nationalId, fullName: fullname, password }
         );
         nextSlideGo();
       } else {
@@ -156,6 +157,7 @@ const Register = () => {
   const confirmImage = async () => {
     const formData = new FormData();
     formData.append("image", file);
+    setIsDisabled(true);
 
     try {
       const res = await axios.post(
@@ -170,19 +172,25 @@ const Register = () => {
       setImageUrl(res.data.url);
       const contract = await axios.post(
         `${process.env.REACT_APP_SERVER_URL}contract/`,
-        { userId, motocycles: itemsNumber, isDevided: rentMany, img: imageUrl }
+        {
+          userId,
+          motocycles: itemsNumber,
+          isDevided: rentMany,
+          img: imageUrl,
+          rent: 18,
+        }
       );
       const user: any = await axios.get(
-        `${process.env.REACT_APP_SERVER_URL}user/${userId}`,
-        {}
+        `${process.env.REACT_APP_SERVER_URL}user/${userId}`
       );
       await axios.post(
         `${process.env.REACT_APP_SERVER_URL}user/stagefour/${userId}`,
-        { contracts: [...user.data.contracts, contract] }
+        { contracts: [...user.data.contracts, contract.data] }
       );
       nextSlideGo();
     } catch (err) {
       console.error("Image upload failed", err);
+      setIsDisabled(false);
     }
   };
 
@@ -502,7 +510,11 @@ const Register = () => {
             ) : (
               ""
             )}
-            <SlideButton text="التالي" event={confirmImage} />
+            <SlideButton
+              text="التالي"
+              event={confirmImage}
+              isDisabled={isDisabled}
+            />
           </div>
         </div>
 

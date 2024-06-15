@@ -29,7 +29,7 @@ export const moveUserToSecondStage = async (req: Request, res: Response) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       req.params.id as string,
       {
-        verifiyStage: "second",
+        verifyStage: "second",
       }
     );
     res.status(200).json(updatedUser);
@@ -48,7 +48,7 @@ export const moveUserToThirdStage = async (req: Request, res: Response) => {
     const updatedUser = await UserModel.findByIdAndUpdate(
       req.params.id as string,
       {
-        verifiyStage: "third",
+        verifyStage: "third",
         phone: req.body.phone,
         fullName: req.body.fullName,
         nationalId: req.body.nationalId,
@@ -65,7 +65,7 @@ export const moveUserToThirdStage = async (req: Request, res: Response) => {
 export const moveUserToFourthStage = async (req: Request, res: Response) => {
   try {
     const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, {
-      verifiyStage: "fourth",
+      verifyStage: "fourth",
       contracts: req.body.contracts,
     });
     res.status(200).json(updatedUser);
@@ -80,7 +80,7 @@ export const verifyUser = async (req: Request, res: Response) => {
     const admin = await AdminModel.findById(req.body.adminId);
     if (admin) {
       const updatedUser = await UserModel.findByIdAndUpdate(req.params.id, {
-        verifiyStage: "completed",
+        verifyStage: "completed",
       });
       res.status(200).json(updatedUser);
     } else {

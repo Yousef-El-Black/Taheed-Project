@@ -6,6 +6,8 @@ const ContractSchema = new Schema(
     isDevided: { type: Boolean, required: true, default: false },
     userId: { type: String, required: true },
     img: { type: String },
+    rent: { type: Number },
+    status: { type: String, default: "pending" },
   },
   { timestamps: true }
 );
