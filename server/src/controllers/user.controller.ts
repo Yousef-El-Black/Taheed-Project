@@ -94,16 +94,11 @@ export const verifyUser = async (req: Request, res: Response) => {
 // Edit User
 export const editUser = async (req: Request, res: Response) => {
   try {
-    const admin = await AdminModel.findById(req.body.adminId);
-    if (admin?.fullAccess || req.body.userId == req.params.id) {
-      const updatedUser = await UserModel.findByIdAndUpdate(
-        req.params.id,
-        req.body
-      );
-      res.status(200).json(updatedUser);
-    } else {
-      res.status(401).json("You Are not Have Access To Do That!");
-    }
+    const updatedUser = await UserModel.findByIdAndUpdate(
+      req.params.id,
+      req.body
+    );
+    res.status(200).json(updatedUser);
   } catch (err) {
     res.status(500).json(err);
   }

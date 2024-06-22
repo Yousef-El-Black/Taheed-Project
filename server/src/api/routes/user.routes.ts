@@ -11,6 +11,10 @@ import {
   getAllUsers,
   getUserByEmail,
 } from "../../controllers/user.controller";
+import {
+  validateAccessMiddleware,
+  validateTokenMiddleware,
+} from "../../middlewares/auth.middleware";
 
 const userRoutes: IRouter = Router();
 
@@ -24,14 +28,14 @@ userRoutes.post("/stagefour/:id", moveUserToFourthStage);
 
 userRoutes.post("/verify/:id", verifyUser);
 
-userRoutes.put("/:id", editUser);
+userRoutes.put("/:id", validateTokenMiddleware, editUser);
 
 userRoutes.delete("/:id", deleteUser);
 
 userRoutes.get("/findbyemail/:email", getUserByEmail);
 
-userRoutes.get("/:id", getUser);
+userRoutes.get("/:id", validateAccessMiddleware, getUser);
 
-userRoutes.get("/", getAllUsers);
+userRoutes.get("/", validateTokenMiddleware, getAllUsers);
 
 export default userRoutes;

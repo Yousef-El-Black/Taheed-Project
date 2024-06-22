@@ -17,7 +17,6 @@ export const signin = async (
       user
     );
     dispatch(signinSuccess(res.data));
-    console.log(res.data);
   } catch (error) {
     dispatch(signinFailure());
   }

@@ -5,18 +5,25 @@ import {
   getAdmin,
   getAllAdmins,
   updateAdmin,
+  createMainAdmin,
+  authenticate,
 } from "../../controllers/admin.controller";
+import { validateAccessMiddleware } from "../../middlewares/auth.middleware";
 
 const adminRoutes: IRouter = Router();
 
-adminRoutes.post("/", createNewAdmin);
+adminRoutes.post("/mainAdmin", createMainAdmin);
+
+adminRoutes.post("/auth", authenticate);
+
+adminRoutes.post("/", validateAccessMiddleware, createNewAdmin);
 
 adminRoutes.put("/:id", updateAdmin);
 
-adminRoutes.delete("/:id", deleteAdmin);
+adminRoutes.delete("/:id", validateAccessMiddleware, deleteAdmin);
 
-adminRoutes.get("/:id", getAdmin);
+adminRoutes.get("/:id", validateAccessMiddleware, getAdmin);
 
-adminRoutes.get("/", getAllAdmins);
+adminRoutes.get("/", validateAccessMiddleware, getAllAdmins);
 
 export default adminRoutes;

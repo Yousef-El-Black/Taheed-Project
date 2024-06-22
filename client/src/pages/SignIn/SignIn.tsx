@@ -24,7 +24,6 @@ const SignIn = () => {
       );
       if (foundUser.data.verifyStage) {
         signin(dispatch, { email, password });
-        console.log(currentUser);
       } else {
         console.error("User is not Found");
       }

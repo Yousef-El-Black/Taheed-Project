@@ -109,8 +109,7 @@ const Dashboard = () => {
                     width: `${
                       contracts
                         ? ((contracts.length * 18 - getRents()) /
-                            contracts.length) *
-                          18 *
+                            (contracts.length * 18)) *
                           100
                         : 100
                     }%`,
@@ -140,7 +139,7 @@ const Dashboard = () => {
                   <></>
                 )}
               </ul>
-              {contracts ? (
+              {contracts &&
                 contracts.map((item: any, index: number) => {
                   return (
                     <div
@@ -163,10 +162,7 @@ const Dashboard = () => {
                       </div>
                     </div>
                   );
-                })
-              ) : (
-                <></>
-              )}
+                })}
             </div>
           </div>
         </div>

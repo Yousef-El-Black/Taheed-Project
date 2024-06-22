@@ -1,0 +1,35 @@
+@import "../../variables";
+
+.contract {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  flex-direction: column;
+  align-items: center;
+
+  > div {
+    flex: 1;
+  }
+}
+
+.hidden {
+  display: none;
+}
+
+input[type="submit"] {
+  background-color: $bgColor;
+  border: 2px solid $purpleColor;
+  color: $purpleColor;
+  outline: none;
+  border-radius: 15px;
+  font-size: 18px;
+  padding: 20px 30px;
+  cursor: pointer;
+  margin: 10px;
+  transition: 0.3s;
+
+  &:hover {
+    background-color: $purpleColor;
+    color: $bgColor;
+  }
+}

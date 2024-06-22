@@ -1,7 +1,8 @@
 import AdminModel from "../models/admin.model";
 import { Request, Response } from "express";
 import bcrypt from "bcrypt";
-import { PEPPER, SALT } from "../config";
+import { JWT_SEC, PEPPER, SALT } from "../config";
+import jwt from "jsonwebtoken";
 
 // Create new Admin
 export const createNewAdmin = async (req: Request, res: Response) => {
@@ -18,6 +19,21 @@ export const createNewAdmin = async (req: Request, res: Response) => {
     } else {
       res.status(403).json("You don't have Access to Do That!");
     }
+  } catch (err) {
+    res.status(500).json(err);
+  }
+};
+
+// Create the Main Admin
+export const createMainAdmin = async (req: Request, res: Response) => {
+  try {
+    const { password, ...data } = req.body;
+    const pepper = PEPPER as string;
+    const salt = bcrypt.genSaltSync(parseInt(SALT as string));
+    const incodedPassword = bcrypt.hashSync(`${password}${pepper}`, salt);
+    const newAdmin = new AdminModel({ ...data, password: incodedPassword });
+    await newAdmin.save();
+    res.status(201).json(newAdmin);
   } catch (err) {
     res.status(500).json(err);
   }
@@ -76,4 +92,29 @@ export const getAllAdmins = async (_req: Request, res: Response) => {
   } catch (err) {
     res.status(500).json(err);
   }
+};
+
+// Authenticate Admin
+export const authenticate = async (req: Request, res: Response) => {
+  try {
+    const admin: any = await AdminModel.findOne({ email: req.body.email });
+    const realPassword = admin.password;
+    const isPasswordValid = bcrypt.compareSync(
+      `${req.body.password}${PEPPER}`,
+      realPassword
+    );
+    if (isPasswordValid) {
+      const accessToken = jwt.sign(
+        {
+          fullAccess: admin.fullAccess,
+          email: admin.email,
+          creatorId: admin.creatorId,
+        },
+        JWT_SEC as unknown as string
+      );
+      res.status(200).json({ ...admin, accessToken });
+    } else {
+      res.status(500).json("Wrong Password!");
+    }
+  } catch (err) {}
 };

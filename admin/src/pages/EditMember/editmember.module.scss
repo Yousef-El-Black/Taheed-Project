@@ -1,0 +1,25 @@
+@import "../../variables";
+
+.topbar {
+  display: flex;
+  gap: 20px;
+  li {
+    background-color: white;
+    color: $darkColor;
+    border: 2px solid $darkColor;
+    width: 25px;
+    height: 25px;
+    border-radius: 5px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
+    transition: 0.3s;
+
+    &:hover,
+    &.active {
+      background-color: $darkColor;
+      color: white;
+    }
+  }
+}

@@ -13,3 +13,13 @@ const AdminSchema = new Schema(
 );
 
 export default model("Admins", AdminSchema);
+
+/*
+{
+    email: admin@admin.ad,
+    password: adminadmin,
+    fullName: Creator Admin,
+    fullAccess: true
+}
+
+*/
