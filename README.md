@@ -13,7 +13,7 @@ An App to Rent Motocycles Online.
 
 ## Introduction
 
-the Client-Side show everything for customer, there's a independent side for Admins and Staff (Admin-side) to Control App totally flexible, and responsive. This app Specially made to make it easy for admins and Clients before.
+the Client-Side show everything for customer, there's an independent side for Admins and Staff (Admin-side) to Control App totally flexible, and responsive. This app Specially made to make it easy for admins and Clients before.
 
 ## Technologies Used
 
